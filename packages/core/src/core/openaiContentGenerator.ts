@@ -21,7 +21,7 @@ import {
   FunctionResponse,
 } from '@google/genai';
 import { AuthType, ContentGenerator } from './contentGenerator.js';
-import OpenAI from 'openai';
+import { AzureOpenAI, OpenAI } from 'openai';
 import { logApiError, logApiResponse } from '../telemetry/loggers.js';
 import { ApiErrorEvent, ApiResponseEvent } from '../telemetry/types.js';
 import { Config } from '../config/config.js';
@@ -78,7 +78,7 @@ interface OpenAIResponseFormat {
 }
 
 export class OpenAIContentGenerator implements ContentGenerator {
-  protected client: OpenAI;
+  protected client: OpenAI | AzureOpenAI;
   private model: string;
   private config: Config;
   private streamingToolCalls: Map<
@@ -129,13 +129,22 @@ export class OpenAIContentGenerator implements ContentGenerator {
         : {}),
     };
 
-    this.client = new OpenAI({
-      apiKey,
-      baseURL,
-      timeout: timeoutConfig.timeout,
-      maxRetries: timeoutConfig.maxRetries,
-      defaultHeaders,
+    // this.client = new OpenAI({
+    //   apiKey,
+    //   baseURL,
+    //   timeout: timeoutConfig.timeout,
+    //   maxRetries: timeoutConfig.maxRetries,
+    //   defaultHeaders,
+    // });
+
+    this.client = new AzureOpenAI({
+        endpoint: baseURL,
+        apiKey: apiKey,
+        apiVersion: "2025-01-01-preview",
+        deployment: model
     });
+
+
   }
 
   /**
