@@ -1,7 +1,7 @@
 {
-  "name": "@qwen-code/qwen-code-core",
+  "name": "qwen-core-instavm",
   "version": "0.0.5",
-  "description": "Qwen Code Core",
+  "description": "Qwen Code Core - instavm fork",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/QwenLM/qwen-code.git"
